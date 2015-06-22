@@ -29,5 +29,11 @@ class SparkJobUtilsSpec extends FunSpec with Matchers {
       val sparkConf = getSparkConf(Map("spark.cleaner.ttl" -> 86400))
       sparkConf.getInt("spark.cleaner.ttl", 0) should equal (86400)
     }
+
+    it("should set both es.nodes and es.nodes.discovery") {
+      val sparkConf = getSparkConf(Map("passthrough.es.nodes" -> "foobar:9200", "passthrough.es.nodes.discovery" -> false))
+      sparkConf.getBoolean("es.nodes.discovery", true) should equal (false)
+      sparkConf.get("es.nodes", "localhost:9200") should equal ("foobar:9200")
+    }
   }
 }
